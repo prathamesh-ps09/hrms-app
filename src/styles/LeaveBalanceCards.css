@@ -1,0 +1,53 @@
+.leave-balance-row {
+    display: flex;
+    gap: var(--spacing-md);
+    overflow-x: auto;
+    padding-bottom: var(--spacing-sm);
+}
+
+.balance-card {
+    min-width: 140px;
+    background-color: var(--color-card);
+    padding: var(--spacing-md);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.balance-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.balance-type {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--color-text-secondary);
+}
+
+.balance-count {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.progress-bar-bg {
+    height: 6px;
+    background-color: var(--color-bg);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    border-radius: var(--radius-full);
+}
+
+.balance-footer {
+    display: flex;
+    justify-content: space-between;
+    font-size: 10px;
+    color: var(--color-text-secondary);
+}

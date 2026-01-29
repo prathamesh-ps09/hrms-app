@@ -1,0 +1,29 @@
+.dashboard-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    /* Stack on mobile */
+    gap: var(--spacing-md);
+}
+
+/* On larger screens, maybe 3 columns? 
+   But mobile-first means 1 column is fine or 2 cols?
+   The designs shows 3 cards. 
+   On very small screens (320px), 1 col is best.
+   On standard mobile (375+), maybe 1 or 2?
+   Let's stick to 1 column for the cards to ensuring they have space, 
+   or maybe scrollable row? 
+   The prompt says "Display three stat cards showing...". 
+   Let's use a scrollable row if it gets too tight or just stack them.
+   Stacking them is safest for Vertical scrolling.
+*/
+
+@media (min-width: 600px) {
+    .stats-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}

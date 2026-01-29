@@ -1,0 +1,138 @@
+.documents-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-md);
+}
+
+.category-card {
+    background-color: var(--color-card);
+    padding: var(--spacing-md);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-md);
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.1s;
+}
+
+.category-card:active {
+    transform: scale(0.98);
+}
+
+.category-icon {
+    width: 56px;
+    height: 56px;
+    background-color: var(--color-primary-light);
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.category-name {
+    font-weight: 500;
+    font-size: 14px;
+    color: var(--color-text-primary);
+}
+
+.category-count {
+    font-size: 12px;
+    color: var(--color-text-secondary);
+}
+
+/* File View */
+.file-view {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+.file-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.back-btn {
+    color: var(--color-text-secondary);
+    font-size: 14px;
+}
+
+.file-header h3 {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.upload-btn {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    color: var(--color-primary);
+    font-weight: 500;
+    font-size: 14px;
+}
+
+.file-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+}
+
+.file-item {
+    background-color: var(--color-card);
+    padding: var(--spacing-md);
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    box-shadow: var(--shadow-sm);
+}
+
+.file-details {
+    flex: 1;
+}
+
+.file-name {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--color-text-primary);
+}
+
+.file-meta {
+    font-size: 12px;
+    color: var(--color-text-secondary);
+}
+
+.file-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.action-icon {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-text-secondary);
+    border-radius: var(--radius-full);
+}
+
+.action-icon:hover {
+    background-color: var(--color-bg);
+    color: var(--color-primary);
+}
+
+.empty-category {
+    text-align: center;
+    color: var(--color-text-secondary);
+    margin-top: var(--spacing-lg);
+}

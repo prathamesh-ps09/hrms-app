@@ -1,0 +1,56 @@
+.leaves-container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+}
+
+.leaves-header-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.tabs {
+    display: flex;
+    background-color: var(--color-card);
+    padding: 4px;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+}
+
+.tab-btn {
+    padding: 6px 16px;
+    border-radius: var(--radius-sm);
+    font-weight: 500;
+    font-size: 14px;
+    color: var(--color-text-secondary);
+}
+
+.tab-btn.active {
+    background-color: var(--color-primary);
+    color: white;
+}
+
+.btn-apply {
+    background-color: var(--color-primary);
+    color: white;
+    padding: 8px 16px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 500;
+    font-size: 14px;
+}
+
+.list-section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+.list-section h3 {
+    font-size: 16px;
+    font-weight: bold;
+    color: var(--color-text-primary);
+}

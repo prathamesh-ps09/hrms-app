@@ -1,0 +1,14 @@
+.app-layout {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--color-bg);
+}
+
+.app-content {
+    flex: 1;
+    padding: 0 var(--spacing-md);
+    padding-bottom: calc(64px + var(--spacing-md));
+    /* Bottom nav height + spacing */
+    overflow-y: auto;
+}

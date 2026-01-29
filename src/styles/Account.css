@@ -1,0 +1,231 @@
+.account-container {
+    padding-bottom: 80px;
+    /* Space for bottom nav */
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+}
+
+.profile-header {
+    background-color: var(--color-card);
+    padding: var(--spacing-lg);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+}
+
+.profile-avatar {
+    width: 80px;
+    height: 80px;
+    background-color: var(--color-primary-light);
+    color: var(--color-primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    font-weight: bold;
+    border: 3px solid var(--color-bg);
+}
+
+.profile-info h2 {
+    font-size: 20px;
+    font-weight: bold;
+    color: var(--color-text-primary);
+    margin: 0;
+}
+
+.profile-role {
+    color: var(--color-text-secondary);
+    font-size: 14px;
+    margin-top: 4px;
+}
+
+.section-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin-bottom: var(--spacing-md);
+}
+
+.details-card {
+    background-color: var(--color-card);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+}
+
+.detail-item {
+    padding: var(--spacing-md);
+    border-bottom: 1px solid var(--color-border);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+}
+
+.detail-item:last-child {
+    border-bottom: none;
+}
+
+.item-icon {
+    width: 40px;
+    height: 40px;
+    background-color: var(--color-bg);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-text-secondary);
+}
+
+.item-content {
+    flex: 1;
+}
+
+.item-label {
+    font-size: 12px;
+    color: var(--color-text-secondary);
+    margin-bottom: 2px;
+}
+
+.item-value {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--color-text-primary);
+}
+
+.settings-card {
+    background-color: var(--color-card);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+}
+
+.setting-item {
+    padding: var(--spacing-md);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.setting-item:last-child {
+    border-bottom: none;
+}
+
+.setting-info {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--color-text-primary);
+}
+
+/* Toggle Switch */
+.toggle-switch {
+    width: 44px;
+    height: 24px;
+    background-color: var(--color-border);
+    border-radius: 12px;
+    position: relative;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.toggle-switch.active {
+    background-color: var(--color-primary);
+}
+
+.toggle-thumb {
+    width: 20px;
+    height: 20px;
+    background-color: white;
+    border-radius: 50%;
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    transition: transform 0.3s;
+    box-shadow: var(--shadow-sm);
+}
+
+.toggle-switch.active .toggle-thumb {
+    transform: translateX(20px);
+}
+
+.action-btn {
+    width: 100%;
+    padding: 16px;
+    border-radius: var(--radius-lg);
+    font-size: 16px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    border: none;
+}
+
+.btn-logout {
+    background-color: #FEE2E2;
+    color: #EF4444;
+}
+
+.btn-logout:active {
+    background-color: #FCA5A5;
+}
+
+/* Theme Selector - Segmented Control Style */
+.theme-selector {
+    display: flex;
+    background-color: var(--color-bg);
+    /* Track background */
+    padding: 4px;
+    border-radius: var(--radius-md);
+    gap: 4px;
+    /* Ensure it doesn't overflow */
+    width: fit-content;
+    min-width: 200px;
+    /* Minimum width for clickability */
+}
+
+.theme-btn {
+    flex: 1;
+    /* Distribute space equally */
+    padding: 8px 16px;
+    border: none;
+    background: transparent;
+    color: var(--color-text-secondary);
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: center;
+}
+
+.theme-btn:hover {
+    color: var(--color-text-primary);
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.theme-btn.active {
+    background-color: var(--color-card);
+    /* White in Light, Gray 800 in Dark */
+    color: var(--color-text-primary);
+    box-shadow: var(--shadow-sm);
+    font-weight: 600;
+}
+
+/* Dark mode specific hover adjustment */
+:root[class="dark"] .theme-btn:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+:root[class="dark"] .theme-btn.active {
+    color: var(--color-primary);
+    /* Highlight active text in dark mode */
+}

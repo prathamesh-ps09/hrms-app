@@ -1,0 +1,185 @@
+.timesheet-editor {
+    background-color: var(--color-card);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    padding: var(--spacing-lg);
+}
+
+.editor-header {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-xl);
+    padding-bottom: var(--spacing-md);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.editor-header h3 {
+    margin: 0;
+    flex: 1;
+    font-size: 18px;
+    color: var(--color-text-primary);
+}
+
+.week-display {
+    color: var(--color-text-secondary);
+    font-size: 14px;
+    background-color: var(--color-bg);
+    padding: 4px 12px;
+    border-radius: var(--radius-full);
+}
+
+.btn-icon {
+    background: none;
+    border: none;
+    color: var(--color-text-primary);
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 50%;
+}
+
+.btn-icon:hover {
+    background-color: var(--color-bg);
+}
+
+/* Grid Layout */
+.grid-container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 16px;
+    overflow-x: auto;
+}
+
+.grid-header-row {
+    display: grid;
+    grid-template-columns: 2fr repeat(7, 60px) 40px;
+    gap: 8px;
+    margin-bottom: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    text-align: center;
+}
+
+.col-project {
+    text-align: left;
+    padding-left: 4px;
+}
+
+.grid-row {
+    display: grid;
+    grid-template-columns: 2fr repeat(7, 60px) 40px;
+    gap: 8px;
+    align-items: center;
+    background-color: var(--color-bg);
+    padding: 8px;
+    border-radius: var(--radius-md);
+}
+
+.input-project,
+.input-task {
+    width: 100%;
+    border: 1px solid transparent;
+    background: transparent;
+    padding: 4px 0;
+    font-family: inherit;
+    color: var(--color-text-primary);
+}
+
+.input-project {
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.input-task {
+    font-size: 13px;
+    color: var(--color-text-secondary);
+}
+
+.input-project:focus,
+.input-task:focus {
+    outline: none;
+    border-bottom: 1px solid var(--color-primary);
+}
+
+.input-hour {
+    width: 100%;
+    text-align: center;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    padding: 6px 0;
+    background-color: var(--color-card);
+    color: var(--color-text-primary);
+}
+
+.input-hour:focus {
+    outline: 2px solid var(--color-primary);
+    border-color: transparent;
+}
+
+.btn-delete {
+    background: none;
+    border: none;
+    color: var(--color-error);
+    cursor: pointer;
+    opacity: 0.6;
+}
+
+.btn-delete:hover {
+    opacity: 1;
+}
+
+.btn-add-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    border: 1px dashed var(--color-border);
+    background: transparent;
+    color: var(--color-primary);
+    width: 100%;
+    padding: 12px;
+    justify-content: center;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    margin-bottom: 24px;
+}
+
+.btn-add-row:hover {
+    background-color: var(--color-bg);
+    border-color: var(--color-primary);
+}
+
+.editor-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid var(--color-border);
+    padding-top: 24px;
+}
+
+.total-display {
+    font-size: 16px;
+    color: var(--color-text-primary);
+}
+
+.action-buttons {
+    display: flex;
+    gap: 12px;
+}
+
+.btn-secondary {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background-color: var(--color-bg);
+    color: var(--color-text-primary);
+    border: 1px solid var(--color-border);
+    padding: 8px 16px;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+}
+
+.btn-secondary:hover {
+    background-color: var(--color-border);
+}

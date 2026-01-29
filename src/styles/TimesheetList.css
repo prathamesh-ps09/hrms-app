@@ -1,0 +1,92 @@
+.timesheet-list-container {
+    background-color: var(--color-card);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    padding: var(--spacing-lg);
+}
+
+.list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-md);
+}
+
+.list-header h3 {
+    margin: 0;
+    font-size: 18px;
+    color: var(--color-text-primary);
+}
+
+.btn-primary {
+    background-color: var(--color-primary);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.timesheet-item {
+    display: flex;
+    align-items: center;
+    padding: 16px;
+    border-bottom: 1px solid var(--color-border);
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.timesheet-item:last-child {
+    border-bottom: none;
+}
+
+.timesheet-item:hover {
+    background-color: var(--color-bg);
+}
+
+.ts-icon {
+    width: 40px;
+    height: 40px;
+    background-color: var(--color-bg);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-primary);
+    margin-right: 16px;
+}
+
+.ts-details {
+    flex: 1;
+}
+
+.ts-week {
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin-bottom: 2px;
+}
+
+.ts-hours {
+    font-size: 13px;
+    color: var(--color-text-secondary);
+}
+
+.ts-status {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.chevron {
+    color: var(--color-text-secondary);
+    margin-left: 8px;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 32px;
+    color: var(--color-text-secondary);
+}
