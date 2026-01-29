@@ -1,19 +1,16 @@
 import React, { useState } from 'react';
-import { useEmployees } from '../hooks/useEmployees';
+import { useAuth } from '../hooks/useAuth';
 import { useTheme } from '../context/ThemeContext';
 import { Mail, Phone, Calendar, User, Bell, Moon, LogOut, ChevronRight, Shield } from 'lucide-react';
 import '../styles/Account.css';
 
 const Account: React.FC = () => {
-    // Simulating logged in user
-    const currentUserId = 'EMP001';
-    const { getEmployee } = useEmployees();
+    const { user, logout } = useAuth();
     const { theme, setTheme } = useTheme();
-    const user = getEmployee(currentUserId);
 
     const [notificationsEnabled, setNotificationsEnabled] = useState(true);
 
-    if (!user) return <div>Loading profile...</div>;
+    if (!user) return <div className="loading-screen">Loading profile...</div>;
 
     return (
         <div className="account-container">
@@ -43,7 +40,7 @@ const Account: React.FC = () => {
                         <div className="item-icon"><Phone size={18} /></div>
                         <div className="item-content">
                             <div className="item-label">Phone</div>
-                            <div className="item-value">{user.phone}</div>
+                            <div className="item-value">N/A</div>
                         </div>
                     </div>
                     <div className="detail-item">
@@ -57,7 +54,7 @@ const Account: React.FC = () => {
                         <div className="item-icon"><Calendar size={18} /></div>
                         <div className="item-content">
                             <div className="item-label">Joined</div>
-                            <div className="item-value">{user.joiningDate}</div>
+                            <div className="item-value">N/A</div>
                         </div>
                     </div>
                 </div>
@@ -104,12 +101,12 @@ const Account: React.FC = () => {
                         <div className="setting-info">
                             <Shield size={20} /> Privacy & Security
                         </div>
-                        <ChevronRight size={20} color="var(--color-text-secondary)" />
+                        <ChevronRight size={20} />
                     </div>
                 </div>
             </div>
 
-            <button className="action-btn btn-logout" onClick={() => alert('Logout functionality would trigger here')}>
+            <button className="action-btn btn-logout" onClick={logout}>
                 <LogOut size={20} /> Sign Out
             </button>
         </div>

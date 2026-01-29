@@ -1,64 +1,66 @@
 import React, { createContext, useState, useEffect, type ReactNode } from 'react';
 import type { AttendanceRecord } from '../types';
 import { format } from 'date-fns';
+import api from '../services/api';
 
 interface AttendanceContextType {
     attendanceRecords: AttendanceRecord[];
-    markAttendance: (status: AttendanceRecord['status']) => void;
-    clockOut: () => void;
+    markAttendance: (status: AttendanceRecord['status']) => Promise<void>;
+    clockOut: () => Promise<void>;
     getTodayRecord: () => AttendanceRecord | undefined;
+    refreshAttendance: () => Promise<void>;
 }
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const AttendanceContext = createContext<AttendanceContextType | undefined>(undefined);
 
 export const AttendanceProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-    const [attendanceRecords, setAttendanceRecords] = useState<AttendanceRecord[]>(() => {
-        const saved = localStorage.getItem('hrms_attendance');
-        return saved ? JSON.parse(saved) : [];
-    });
+    const [attendanceRecords, setAttendanceRecords] = useState<AttendanceRecord[]>([]);
+
+    const fetchAttendance = async () => {
+        try {
+            const response = await api.get('/attendance/my');
+            setAttendanceRecords(response.data);
+        } catch (error) {
+            console.error('Error fetching attendance:', error);
+        }
+    };
 
     useEffect(() => {
-        localStorage.setItem('hrms_attendance', JSON.stringify(attendanceRecords));
-    }, [attendanceRecords]);
-
-    // Mock logged in user ID
-    const currentUserId = 'EMP001';
+        fetchAttendance();
+    }, []);
 
     const getTodayRecord = () => {
         const today = format(new Date(), 'yyyy-MM-dd');
-        return attendanceRecords.find(record => record.employeeId === currentUserId && record.date === today);
+        return attendanceRecords.find(record => record.date === today);
     };
 
-    const markAttendance = (status: AttendanceRecord['status']) => {
-        const today = format(new Date(), 'yyyy-MM-dd');
-        const existing = getTodayRecord();
-
-        if (existing) return;
-
-        const newRecord: AttendanceRecord = {
-            id: `ATT${Date.now()}`,
-            employeeId: currentUserId,
-            date: today,
-            status,
-            clockIn: new Date().toLocaleTimeString(),
-        };
-
-        setAttendanceRecords([...attendanceRecords, newRecord]);
+    const markAttendance = async (status: AttendanceRecord['status']) => {
+        try {
+            await api.post('/attendance/mark', { status });
+            await fetchAttendance();
+        } catch (error) {
+            console.error('Error marking attendance:', error);
+        }
     };
 
-    const clockOut = () => {
-        const today = format(new Date(), 'yyyy-MM-dd');
-        setAttendanceRecords(records => records.map(record => {
-            if (record.employeeId === currentUserId && record.date === today && !record.clockOut) {
-                return { ...record, clockOut: new Date().toLocaleTimeString() };
-            }
-            return record;
-        }));
+    const clockOut = async () => {
+        try {
+            await api.put('/attendance/clock-out');
+            await fetchAttendance();
+        } catch (error) {
+            console.error('Error clocking out:', error);
+        }
     };
 
     return (
-        <AttendanceContext.Provider value={{ attendanceRecords, markAttendance, clockOut, getTodayRecord }}>
+        <AttendanceContext.Provider value={{
+            attendanceRecords,
+            markAttendance,
+            clockOut,
+            getTodayRecord,
+            refreshAttendance: fetchAttendance
+        }}>
             {children}
         </AttendanceContext.Provider>
     );

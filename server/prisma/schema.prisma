@@ -1,0 +1,90 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Employee {
+  id           String             @id @default(uuid())
+  fullName     String
+  email        String             @unique
+  password     String             // Added for authentication
+  phone        String
+  department   String
+  designation  String
+  joiningDate  String
+  managerId    String?
+  status       String             @default("Active") // 'Active' | 'On Leave' | 'Terminated'
+  photoUrl     String?
+  role         String             @default("EMPLOYEE") // 'ADMIN' | 'EMPLOYEE'
+  attendance   AttendanceRecord[]
+  leaves       LeaveRequest[]
+  timesheets   Timesheet[]
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime           @updatedAt
+}
+
+model AttendanceRecord {
+  id         String   @id @default(uuid())
+  employeeId String
+  employee   Employee @relation(fields: [employeeId], references: [id])
+  date       String   // YYYY-MM-DD
+  status     String   // 'Present' | 'Absent' | 'Half Day' | 'Work From Home'
+  clockIn    String?
+  clockOut   String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@unique([employeeId, date])
+}
+
+model LeaveRequest {
+  id          String   @id @default(uuid())
+  employeeId  String
+  employee    Employee @relation(fields: [employeeId], references: [id])
+  type        String   // 'Sick Leave' | 'Casual Leave' | 'Paid Leave' | 'Unpaid Leave'
+  startDate   String   // YYYY-MM-DD
+  endDate     String   // YYYY-MM-DD
+  reason      String
+  status      String   @default("Pending") // 'Pending' | 'Approved' | 'Rejected'
+  appliedDate String   // YYYY-MM-DD
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Timesheet {
+  id            String           @id @default(uuid())
+  employeeId    String
+  employee      Employee         @relation(fields: [employeeId], references: [id])
+  weekStartDate String           // YYYY-MM-DD
+  weekEndDate   String           // YYYY-MM-DD
+  status        String           @default("Draft") // 'Draft' | 'Submitted' | 'Approved' | 'Rejected'
+  totalHours    Float
+  submittedDate String?          // YYYY-MM-DD
+  entries       TimesheetEntry[]
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+
+  @@unique([employeeId, weekStartDate])
+}
+
+model TimesheetEntry {
+  id          String    @id @default(uuid())
+  timesheetId String
+  timesheet   Timesheet @relation(fields: [timesheetId], references: [id], onDelete: Cascade)
+  projectId   String
+  taskId      String
+  monday      Float     @default(0)
+  tuesday     Float     @default(0)
+  wednesday   Float     @default(0)
+  thursday    Float     @default(0)
+  friday      Float     @default(0)
+  saturday    Float     @default(0)
+  sunday      Float     @default(0)
+}

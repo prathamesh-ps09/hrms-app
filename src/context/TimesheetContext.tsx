@@ -1,41 +1,42 @@
 import React, { createContext, useState, useEffect, type ReactNode } from 'react';
-import type { Timesheet } from '../types';
+import type { Timesheet, TimesheetEntry } from '../types';
+import api from '../services/api';
 
 interface TimesheetContextType {
     timesheets: Timesheet[];
     getEmployeeTimesheets: (employeeId: string) => Timesheet[];
-    saveTimesheet: (timesheet: Timesheet) => void;
-    deleteTimesheet: (id: string) => void;
+    saveTimesheet: (timesheet: Partial<Timesheet>) => Promise<void>;
+    deleteTimesheet: (id: string) => Promise<void>;
+    refreshTimesheets: () => Promise<void>;
 }
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const TimesheetContext = createContext<TimesheetContextType | undefined>(undefined);
 
 export const TimesheetProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-    const [timesheets, setTimesheets] = useState<Timesheet[]>(() => {
-        const saved = localStorage.getItem('hrms-timesheets');
-        if (saved) {
-            return JSON.parse(saved);
-        }
-        // Mock data for demo
-        return [{
-            id: 'TS001',
-            employeeId: 'EMP001',
-            weekStartDate: '2023-10-23',
-            weekEndDate: '2023-10-29',
-            status: 'Approved',
-            totalHours: 40,
-            entries: [
-                { projectId: 'Project Alpha', taskId: 'Development', hours: [8, 8, 8, 8, 8, 0, 0] }
-            ],
-            submittedDate: '2023-10-30'
-        }];
-    });
+    const [timesheets, setTimesheets] = useState<Timesheet[]>([]);
 
-    // Save to local storage whenever changed
+    const fetchTimesheets = async () => {
+        try {
+            const response = await api.get('/timesheets/my');
+            // Backend returns entries with separate day columns, frontend expects hours array
+            const formattedTimesheets = response.data.map((ts: any) => ({
+                ...ts,
+                entries: ts.entries.map((e: any): TimesheetEntry => ({
+                    projectId: e.projectId,
+                    taskId: e.taskId,
+                    hours: [e.monday, e.tuesday, e.wednesday, e.thursday, e.friday, e.saturday, e.sunday]
+                }))
+            }));
+            setTimesheets(formattedTimesheets);
+        } catch (error) {
+            console.error('Error fetching timesheets:', error);
+        }
+    };
+
     useEffect(() => {
-        localStorage.setItem('hrms-timesheets', JSON.stringify(timesheets));
-    }, [timesheets]);
+        fetchTimesheets();
+    }, []);
 
     const getEmployeeTimesheets = (employeeId: string) => {
         return timesheets.filter(t => t.employeeId === employeeId).sort((a, b) =>
@@ -43,24 +44,40 @@ export const TimesheetProvider: React.FC<{ children: ReactNode }> = ({ children 
         );
     };
 
-    const saveTimesheet = (timesheet: Timesheet) => {
-        setTimesheets(prev => {
-            const index = prev.findIndex(t => t.id === timesheet.id);
-            if (index >= 0) {
-                const updated = [...prev];
-                updated[index] = timesheet;
-                return updated;
-            }
-            return [timesheet, ...prev];
-        });
+    const saveTimesheet = async (data: Partial<Timesheet>) => {
+        try {
+            // Calculate total hours if not provided or ensure consistency
+            const totalHours = data.entries?.reduce((acc, entry) =>
+                acc + entry.hours.reduce((hAcc, h) => hAcc + h, 0), 0
+            ) || 0;
+
+            await api.post('/timesheets/save', {
+                ...data,
+                totalHours
+            });
+            await fetchTimesheets();
+        } catch (error) {
+            console.error('Error saving timesheet:', error);
+        }
     };
 
-    const deleteTimesheet = (id: string) => {
-        setTimesheets(prev => prev.filter(t => t.id !== id));
+    const deleteTimesheet = async (id: string) => {
+        try {
+            await api.delete(`/timesheets/${id}`);
+            await fetchTimesheets();
+        } catch (error) {
+            console.error('Error deleting timesheet:', error);
+        }
     };
 
     return (
-        <TimesheetContext.Provider value={{ timesheets, getEmployeeTimesheets, saveTimesheet, deleteTimesheet }}>
+        <TimesheetContext.Provider value={{
+            timesheets,
+            getEmployeeTimesheets,
+            saveTimesheet,
+            deleteTimesheet,
+            refreshTimesheets: fetchTimesheets
+        }}>
             {children}
         </TimesheetContext.Provider>
     );

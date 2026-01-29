@@ -1,40 +1,50 @@
 import React, { createContext, useState, useEffect, type ReactNode } from 'react';
 import type { LeaveRequest } from '../types';
+import api from '../services/api';
 
 interface LeaveContextType {
     leaveRequests: LeaveRequest[];
-    applyLeave: (leave: Omit<LeaveRequest, 'id' | 'status' | 'appliedDate'>) => void;
-    updateLeaveStatus: (id: string, status: LeaveRequest['status']) => void;
+    applyLeave: (leave: Omit<LeaveRequest, 'id' | 'status' | 'appliedDate'>) => Promise<void>;
+    updateLeaveStatus: (id: string, status: LeaveRequest['status']) => Promise<void>;
     getEmployeeLeaves: (employeeId: string) => LeaveRequest[];
+    refreshLeaves: () => Promise<void>;
 }
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const LeaveContext = createContext<LeaveContextType | undefined>(undefined);
 
 export const LeaveProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-    const [leaveRequests, setLeaveRequests] = useState<LeaveRequest[]>(() => {
-        const saved = localStorage.getItem('hrms_leaves');
-        return saved ? JSON.parse(saved) : [];
-    });
+    const [leaveRequests, setLeaveRequests] = useState<LeaveRequest[]>([]);
 
-    useEffect(() => {
-        localStorage.setItem('hrms_leaves', JSON.stringify(leaveRequests));
-    }, [leaveRequests]);
-
-    const applyLeave = (data: Omit<LeaveRequest, 'id' | 'status' | 'appliedDate'>) => {
-        const newLeave: LeaveRequest = {
-            ...data,
-            id: `LEAVE${Date.now()}`,
-            status: 'Pending',
-            appliedDate: new Date().toISOString().split('T')[0]
-        };
-        setLeaveRequests([...leaveRequests, newLeave]);
+    const fetchLeaves = async () => {
+        try {
+            const response = await api.get('/leaves/my');
+            setLeaveRequests(response.data);
+        } catch (error) {
+            console.error('Error fetching leaves:', error);
+        }
     };
 
-    const updateLeaveStatus = (id: string, status: LeaveRequest['status']) => {
-        setLeaveRequests(requests => requests.map(req =>
-            req.id === id ? { ...req, status } : req
-        ));
+    useEffect(() => {
+        fetchLeaves();
+    }, []);
+
+    const applyLeave = async (data: Omit<LeaveRequest, 'id' | 'status' | 'appliedDate'>) => {
+        try {
+            await api.post('/leaves/apply', data);
+            await fetchLeaves();
+        } catch (error) {
+            console.error('Error applying for leave:', error);
+        }
+    };
+
+    const updateLeaveStatus = async (id: string, status: LeaveRequest['status']) => {
+        try {
+            await api.put(`/leaves/${id}/status`, { status });
+            await fetchLeaves();
+        } catch (error) {
+            console.error('Error updating leave status:', error);
+        }
     };
 
     const getEmployeeLeaves = (employeeId: string) => {
@@ -42,7 +52,13 @@ export const LeaveProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     };
 
     return (
-        <LeaveContext.Provider value={{ leaveRequests, applyLeave, updateLeaveStatus, getEmployeeLeaves }}>
+        <LeaveContext.Provider value={{
+            leaveRequests,
+            applyLeave,
+            updateLeaveStatus,
+            getEmployeeLeaves,
+            refreshLeaves: fetchLeaves
+        }}>
             {children}
         </LeaveContext.Provider>
     );

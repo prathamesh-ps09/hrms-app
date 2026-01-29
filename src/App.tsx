@@ -1,5 +1,4 @@
-
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Layout from './components/Layout';
 import Dashboard from './pages/Dashboard';
 import Attendance from './pages/Attendance';
@@ -9,32 +8,37 @@ import Reports from './pages/Reports';
 import Documents from './pages/Documents';
 import Account from './pages/Account';
 import Timesheets from './pages/Timesheets';
-import { EmployeeProvider } from './context/EmployeeContext';
-import { AttendanceProvider } from './context/AttendanceContext';
-import { LeaveProvider } from './context/LeaveContext';
+import Login from './pages/Login';
+import { ProtectedRoute } from './components/ProtectedRoute';
+import { useAuth } from './hooks/useAuth';
 
 function App() {
+  const { token } = useAuth();
+
   return (
-    <EmployeeProvider>
-      <AttendanceProvider>
-        <LeaveProvider>
-          <BrowserRouter>
-            <Routes>
-              <Route path="/" element={<Layout />}>
-                <Route index element={<Dashboard />} />
-                <Route path="attendance" element={<Attendance />} />
-                <Route path="employees" element={<Employees />} />
-                <Route path="leaves" element={<Leaves />} />
-                <Route path="timesheets" element={<Timesheets />} />
-                <Route path="reports" element={<Reports />} />
-                <Route path="documents" element={<Documents />} />
-                <Route path="account" element={<Account />} />
-              </Route>
-            </Routes>
-          </BrowserRouter>
-        </LeaveProvider>
-      </AttendanceProvider>
-    </EmployeeProvider>
+    <BrowserRouter>
+      <Routes>
+        {/* Public Route */}
+        <Route path="/login" element={!token ? <Login /> : <Navigate to="/" replace />} />
+
+        {/* Protected Routes */}
+        <Route element={<ProtectedRoute />}>
+          <Route path="/" element={<Layout />}>
+            <Route index element={<Dashboard />} />
+            <Route path="attendance" element={<Attendance />} />
+            <Route path="employees" element={<Employees />} />
+            <Route path="leaves" element={<Leaves />} />
+            <Route path="timesheets" element={<Timesheets />} />
+            <Route path="reports" element={<Reports />} />
+            <Route path="documents" element={<Documents />} />
+            <Route path="account" element={<Account />} />
+          </Route>
+        </Route>
+
+        {/* Fallback */}
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
