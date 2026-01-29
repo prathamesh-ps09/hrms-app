@@ -26,7 +26,14 @@ export const LeaveProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     };
 
     useEffect(() => {
-        fetchLeaves();
+        const loadControl = { mounted: true };
+        const init = async () => {
+            if (loadControl.mounted) {
+                await fetchLeaves();
+            }
+        };
+        init();
+        return () => { loadControl.mounted = false; };
     }, []);
 
     const applyLeave = async (data: Omit<LeaveRequest, 'id' | 'status' | 'appliedDate'>) => {

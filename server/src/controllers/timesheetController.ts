@@ -3,7 +3,7 @@ import { AuthRequest } from '../middleware/authMiddleware';
 import prisma from '../lib/prisma';
 
 export const saveTimesheet = async (req: AuthRequest, res: Response) => {
-    const employeeId = req.user.id;
+    const employeeId = req.user!.id;
     const { weekStartDate, weekEndDate, status, totalHours, entries } = req.body;
 
     try {
@@ -21,7 +21,7 @@ export const saveTimesheet = async (req: AuthRequest, res: Response) => {
                 submittedDate: status === 'Submitted' ? new Date().toISOString().split('T')[0] : null,
                 entries: {
                     deleteMany: {}, // Clear existing entries and recreate
-                    create: entries.map((e: any) => ({
+                    create: entries.map((e: { projectId: string; taskId: string; hours: number[] }) => ({
                         projectId: e.projectId,
                         taskId: e.taskId,
                         monday: e.hours[0],
@@ -42,7 +42,7 @@ export const saveTimesheet = async (req: AuthRequest, res: Response) => {
                 totalHours,
                 submittedDate: status === 'Submitted' ? new Date().toISOString().split('T')[0] : null,
                 entries: {
-                    create: entries.map((e: any) => ({
+                    create: entries.map((e: { projectId: string; taskId: string; hours: number[] }) => ({
                         projectId: e.projectId,
                         taskId: e.taskId,
                         monday: e.hours[0],
@@ -65,7 +65,7 @@ export const saveTimesheet = async (req: AuthRequest, res: Response) => {
 };
 
 export const getMyTimesheets = async (req: AuthRequest, res: Response) => {
-    const employeeId = req.user.id;
+    const employeeId = req.user!.id;
     try {
         const timesheets = await prisma.timesheet.findMany({
             where: { employeeId },
@@ -73,7 +73,7 @@ export const getMyTimesheets = async (req: AuthRequest, res: Response) => {
             orderBy: { weekStartDate: 'desc' },
         });
         res.json(timesheets);
-    } catch (error) {
+    } catch {
         res.status(500).json({ message: 'Error fetching timesheets' });
     }
 };

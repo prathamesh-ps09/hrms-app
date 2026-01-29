@@ -27,7 +27,14 @@ export const AttendanceProvider: React.FC<{ children: ReactNode }> = ({ children
     };
 
     useEffect(() => {
-        fetchAttendance();
+        const loadControl = { mounted: true };
+        const init = async () => {
+            if (loadControl.mounted) {
+                await fetchAttendance();
+            }
+        };
+        init();
+        return () => { loadControl.mounted = false; };
     }, []);
 
     const getTodayRecord = () => {

@@ -18,7 +18,7 @@ export const getAllEmployees = async (req: Request, res: Response) => {
             },
         });
         res.json(employees);
-    } catch (error) {
+    } catch {
         res.status(500).json({ message: 'Error fetching employees' });
     }
 };
@@ -36,7 +36,7 @@ export const getEmployeeById = async (req: Request, res: Response) => {
         });
         if (!employee) return res.status(404).json({ message: 'Employee not found' });
         res.json(employee);
-    } catch (error) {
+    } catch {
         res.status(500).json({ message: 'Error fetching employee' });
     }
 };
@@ -49,7 +49,7 @@ export const updateEmployee = async (req: Request, res: Response) => {
             data: req.body,
         });
         res.json(employee);
-    } catch (error) {
+    } catch {
         res.status(500).json({ message: 'Error updating employee' });
     }
 };

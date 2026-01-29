@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import TimesheetList from '../components/TimesheetList';
 import TimesheetEditor from '../components/TimesheetEditor';
 import { useTimesheets } from '../hooks/useTimesheets';
+import { useAuth } from '../hooks/useAuth';
 import type { Timesheet } from '../types';
 
 const Timesheets: React.FC = () => {
     const { getEmployeeTimesheets, saveTimesheet } = useTimesheets();
-    const currentUserId = 'EMP001';
+    const { user } = useAuth();
+    const currentUserId = user?.id || '';
 
     // View state: 'list' or 'edit'
     const [view, setView] = useState<'list' | 'edit'>('list');

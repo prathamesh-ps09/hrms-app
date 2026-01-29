@@ -3,14 +3,15 @@ import LeaveBalanceCards from '../components/LeaveBalanceCards';
 import LeaveList from '../components/LeaveList';
 import LeaveForm from '../components/LeaveForm';
 import { Plus } from 'lucide-react';
+import { useAuth } from '../hooks/useAuth';
 import '../styles/Leaves.css';
 
 const Leaves: React.FC = () => {
     const [activeTab, setActiveTab] = useState<'my-leaves' | 'approvals'>('my-leaves');
     const [isFormOpen, setIsFormOpen] = useState(false);
 
-    // Mock logged in user
-    const currentUserId = 'EMP001';
+    const { user } = useAuth();
+    const currentUserId = user?.id || '';
 
     return (
         <div className="leaves-container">

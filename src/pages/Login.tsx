@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useAuth } from '../hooks/useAuth';
 import { LogIn, User, Lock, Loader2 } from 'lucide-react';
 import '../styles/Login.css';
+import { AxiosError } from 'axios';
 
 const Login: React.FC = () => {
     const { login } = useAuth();
@@ -16,8 +17,9 @@ const Login: React.FC = () => {
         setIsSubmitting(true);
         try {
             await login(email, password);
-        } catch (err: any) {
-            setError(err.response?.data?.message || 'Invalid email or password');
+        } catch (err) {
+            const axiosError = err as AxiosError<{ message: string }>;
+            setError(axiosError.response?.data?.message || 'Invalid email or password');
         } finally {
             setIsSubmitting(false);
         }

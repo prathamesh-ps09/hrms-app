@@ -27,7 +27,14 @@ export const EmployeeProvider: React.FC<{ children: ReactNode }> = ({ children }
     };
 
     useEffect(() => {
-        fetchEmployees();
+        const loadControl = { mounted: true };
+        const init = async () => {
+            if (loadControl.mounted) {
+                await fetchEmployees();
+            }
+        };
+        init();
+        return () => { loadControl.mounted = false; };
     }, []);
 
     const addEmployee = async (data: Omit<Employee, 'id'>) => {

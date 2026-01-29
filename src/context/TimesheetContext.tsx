@@ -19,10 +19,26 @@ export const TimesheetProvider: React.FC<{ children: ReactNode }> = ({ children 
     const fetchTimesheets = async () => {
         try {
             const response = await api.get('/timesheets/my');
-            // Backend returns entries with separate day columns, frontend expects hours array
-            const formattedTimesheets = response.data.map((ts: any) => ({
+
+            interface BackendEntry {
+                projectId: string;
+                taskId: string;
+                monday: number;
+                tuesday: number;
+                wednesday: number;
+                thursday: number;
+                friday: number;
+                saturday: number;
+                sunday: number;
+            }
+
+            interface BackendTimesheet extends Omit<Timesheet, 'entries'> {
+                entries: BackendEntry[];
+            }
+
+            const formattedTimesheets = response.data.map((ts: BackendTimesheet) => ({
                 ...ts,
-                entries: ts.entries.map((e: any): TimesheetEntry => ({
+                entries: ts.entries.map((e: BackendEntry): TimesheetEntry => ({
                     projectId: e.projectId,
                     taskId: e.taskId,
                     hours: [e.monday, e.tuesday, e.wednesday, e.thursday, e.friday, e.saturday, e.sunday]
@@ -35,7 +51,14 @@ export const TimesheetProvider: React.FC<{ children: ReactNode }> = ({ children 
     };
 
     useEffect(() => {
-        fetchTimesheets();
+        const loadControl = { mounted: true };
+        const init = async () => {
+            if (loadControl.mounted) {
+                await fetchTimesheets();
+            }
+        };
+        init();
+        return () => { loadControl.mounted = false; };
     }, []);
 
     const getEmployeeTimesheets = (employeeId: string) => {

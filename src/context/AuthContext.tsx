@@ -22,16 +22,26 @@ interface AuthContextType {
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-    const [user, setUser] = useState<User | null>(null);
+    const [user, setUser] = useState<User | null>(() => {
+        const storedUser = localStorage.getItem('hrms_user');
+        if (storedUser) {
+            try {
+                return JSON.parse(storedUser);
+            } catch {
+                return null;
+            }
+        }
+        return null;
+    });
     const [token, setToken] = useState<string | null>(localStorage.getItem('hrms_token'));
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        const storedUser = localStorage.getItem('hrms_user');
-        if (storedUser && token) {
-            setUser(JSON.parse(storedUser));
-        }
-        setIsLoading(false);
+        // Just clear loading on mount/token change
+        const timer = setTimeout(() => {
+            setIsLoading(false);
+        }, 0);
+        return () => clearTimeout(timer);
     }, [token]);
 
     const login = async (email: string, password: string) => {
