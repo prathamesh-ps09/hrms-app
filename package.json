@@ -5,13 +5,16 @@
     "description": "HRMS Application Monorepo",
     "scripts": {
         "install:all": "npm install && cd client && npm install && cd ../server && npm install",
+        "dev": "npm run dev:all",
         "dev:client": "cd client && npm run dev",
         "dev:server": "cd server && npm run dev",
         "dev:all": "concurrently \"npm run dev:client\" \"npm run dev:server\"",
+        "build": "npm run build:all",
         "build:client": "cd client && npm run build",
         "build:server": "cd server && npm run build",
         "build:all": "npm run build:server && npm run build:client",
         "db:seed": "cd server && npx prisma db seed",
+        "lint": "npm run lint:all",
         "lint:all": "cd client && npm run lint",
         "test:all": "echo \"Error: no test specified\" && exit 1"
     },
