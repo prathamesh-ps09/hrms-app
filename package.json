@@ -10,7 +10,7 @@
         "dev:all": "concurrently \"npm run dev:client\" \"npm run dev:server\"",
         "build:client": "cd client && npm run build",
         "build:server": "cd server && npm run build",
-        "build:all": "npm run build:client && npm run build:server",
+        "build:all": "npm run build:server && npm run build:client",
         "db:seed": "cd server && npx prisma db seed",
         "lint:all": "cd client && npm run lint",
         "test:all": "echo \"Error: no test specified\" && exit 1"
