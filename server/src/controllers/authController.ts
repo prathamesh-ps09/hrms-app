@@ -7,16 +7,21 @@ export const login = async (req: Request, res: Response) => {
     const { email, password } = req.body;
 
     try {
+        const allEmployees = await prisma.employee.findMany({ select: { email: true } });
+        console.log(`[AUTH DIAGNOSTIC] Login attempt for: ${email}`);
+        console.log(`[AUTH DIAGNOSTIC] Total employees in DB: ${allEmployees.length}`);
+        console.log(`[AUTH DIAGNOSTIC] Available emails: ${allEmployees.map(e => e.email).join(', ')}`);
+
         const employee = await prisma.employee.findUnique({
             where: { email },
         });
 
         if (!employee) {
-            console.log(`Login failed: No employee found with email ${email}`);
+            console.log(`[AUTH DIAGNOSTIC] Login failed: No employee found with email ${email}`);
             return res.status(401).json({ message: 'Invalid credentials' });
         }
 
-        console.log(`Login attempt for: ${email}. User found in database.`);
+        console.log(`[AUTH DIAGNOSTIC] User found. Comparing passwords...`);
 
         const isMatch = await bcrypt.compare(password, employee.password);
         if (!isMatch) {
