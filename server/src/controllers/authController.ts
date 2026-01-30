@@ -12,8 +12,11 @@ export const login = async (req: Request, res: Response) => {
         });
 
         if (!employee) {
+            console.log(`Login failed: No employee found with email ${email}`);
             return res.status(401).json({ message: 'Invalid credentials' });
         }
+
+        console.log(`Login attempt for: ${email}. User found in database.`);
 
         const isMatch = await bcrypt.compare(password, employee.password);
         if (!isMatch) {
