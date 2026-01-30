@@ -1,11 +1,16 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { Home, Users, Calendar, Folder, User, Clock } from 'lucide-react';
+import { Home, Users, Calendar, Folder, User, Clock, ShieldCheck } from 'lucide-react';
 import '../styles/BottomNav.css';
+import { useAuth } from '../hooks/useAuth';
 
 const BottomNav: React.FC = () => {
+    const { user } = useAuth();
+    const isAdmin = user?.role === 'ADMIN';
+
     const navItems = [
         { to: '/', icon: Home, label: 'Home' },
+        ...(isAdmin ? [{ to: '/admin', icon: ShieldCheck, label: 'Admin' }] : []),
         { to: '/employees', icon: Users, label: 'People' },
         { to: '/attendance', icon: Calendar, label: 'Attendance' }, // Changed back to Attendance for clarity or keep Leaves? The user layout has specific bottom nav requirements.
         // Prompt said: "Home, People, Leaves, Docs, Account".

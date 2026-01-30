@@ -23,12 +23,14 @@ const Leaves: React.FC = () => {
                     >
                         My Leaves
                     </button>
-                    <button
-                        className={`tab-btn ${activeTab === 'approvals' ? 'active' : ''}`}
-                        onClick={() => setActiveTab('approvals')}
-                    >
-                        Approvals
-                    </button>
+                    {user?.role === 'ADMIN' && (
+                        <button
+                            className={`tab-btn ${activeTab === 'approvals' ? 'active' : ''}`}
+                            onClick={() => setActiveTab('approvals')}
+                        >
+                            Approvals
+                        </button>
+                    )}
                 </div>
                 {activeTab === 'my-leaves' && (
                     <button className="btn-apply" onClick={() => setIsFormOpen(true)}>

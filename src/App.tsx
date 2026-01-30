@@ -10,7 +10,9 @@ import Account from './pages/Account';
 import Timesheets from './pages/Timesheets';
 import Login from './pages/Login';
 import { ProtectedRoute } from './components/ProtectedRoute';
+import { RoleProtectedRoute } from './components/RoleProtectedRoute';
 import { useAuth } from './hooks/useAuth';
+import AdminDashboard from './pages/AdminDashboard';
 
 function App() {
   const { token } = useAuth();
@@ -32,6 +34,13 @@ function App() {
             <Route path="reports" element={<Reports />} />
             <Route path="documents" element={<Documents />} />
             <Route path="account" element={<Account />} />
+
+            {/* Admin Only Routes */}
+            <Route element={<RoleProtectedRoute allowedRoles={['ADMIN']} />}>
+              <Route path="admin" element={<AdminDashboard />} />
+              <Route path="admin/employees" element={<Employees />} />
+              <Route path="admin/leaves" element={<Leaves />} />
+            </Route>
           </Route>
         </Route>
 

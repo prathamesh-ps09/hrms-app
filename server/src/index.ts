@@ -6,6 +6,7 @@ import employeeRoutes from './routes/employeeRoutes';
 import attendanceRoutes from './routes/attendanceRoutes';
 import leaveRoutes from './routes/leaveRoutes';
 import timesheetRoutes from './routes/timesheetRoutes';
+import adminRoutes from './routes/adminRoutes';
 
 dotenv.config();
 
@@ -21,6 +22,7 @@ app.use('/api/employees', employeeRoutes);
 app.use('/api/attendance', attendanceRoutes);
 app.use('/api/leaves', leaveRoutes);
 app.use('/api/timesheets', timesheetRoutes);
+app.use('/api/admin', adminRoutes);
 
 app.get('/', (req, res) => {
     res.send('HRMS Backend is running');

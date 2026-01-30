@@ -53,3 +53,27 @@ export const updateEmployee = async (req: Request, res: Response) => {
         res.status(500).json({ message: 'Error updating employee' });
     }
 };
+
+export const addEmployee = async (req: Request, res: Response) => {
+    try {
+        const employee = await prisma.employee.create({
+            data: req.body,
+        });
+        res.status(201).json(employee);
+    } catch (error) {
+        console.error('Add employee error:', error);
+        res.status(500).json({ message: 'Error adding employee' });
+    }
+};
+
+export const deleteEmployee = async (req: Request, res: Response) => {
+    const { id } = req.params;
+    try {
+        await prisma.employee.delete({
+            where: { id: id as string },
+        });
+        res.json({ message: 'Employee deleted' });
+    } catch {
+        res.status(500).json({ message: 'Error deleting employee' });
+    }
+};

@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import { useEmployees } from '../hooks/useEmployees';
+import { useAuth } from '../hooks/useAuth';
 import { Search, Plus } from 'lucide-react';
 import '../styles/EmployeeList.css';
 
 const EmployeeList: React.FC<{ onAddClick: () => void, onEditClick: (id: string) => void }> = ({ onAddClick, onEditClick }) => {
     const { employees } = useEmployees();
+    const { user } = useAuth();
+    const isAdmin = user?.role === 'ADMIN';
     const [searchTerm, setSearchTerm] = useState('');
 
     const filteredEmployees = employees.filter(emp =>
@@ -26,15 +29,17 @@ const EmployeeList: React.FC<{ onAddClick: () => void, onEditClick: (id: string)
                         className="search-input"
                     />
                 </div>
-                <button className="add-btn" onClick={onAddClick}>
-                    <Plus size={20} />
-                    <span>Add</span>
-                </button>
+                {isAdmin && (
+                    <button className="add-btn" onClick={onAddClick}>
+                        <Plus size={20} />
+                        <span>Add</span>
+                    </button>
+                )}
             </div>
 
             <div className="list-content">
                 {filteredEmployees.map((emp) => (
-                    <div key={emp.id} className="employee-card" onClick={() => onEditClick(emp.id)}>
+                    <div key={emp.id} className="employee-card" onClick={() => isAdmin && onEditClick(emp.id)}>
                         <div className="emp-avatar">
                             {emp.fullName.charAt(0)}
                         </div>
